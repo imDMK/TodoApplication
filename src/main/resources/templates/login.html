@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+
+  <title>TODO App - Logowanie</title>
+
+  <link th:href="@{/css/login.css}" rel="stylesheet">
+</head>
+
+<body>
+<section>
+  <div class="notifications" id="notifications" th:if="${error} or ${success}">
+    <div class="error" th:if="${error}">
+      <ion-icon name="thumbs-down"></ion-icon>
+      <div class="notificationMessage" th:text="${error}"></div>
+    </div>
+
+    <div class="success" th:if="${success}">
+      <ion-icon name="thumbs-up"></ion-icon>
+      <div class="notificationMessage" th:text="${success}"></div>
+    </div>
+  </div>
+
+  <a class="home" th:href="@{/}">
+    <ion-icon name="home-outline"></ion-icon>
+  </a>
+
+  <div class="form-box">
+    <div class="form_value">
+      <form method="post" th:action="@{/login}">
+        <h2>Logowanie</h2>
+
+        <div class="inputbox">
+          <ion-icon name="mail-outline"></ion-icon>
+          <input name="email" type="email" placeholder="Email" autocomplete="email" required>
+        </div>
+
+        <div class="inputbox">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+          <input name="password" type="password" placeholder="Password" autocomplete="current-password" required>
+        </div>
+
+        <button class="login_button">Zaloguj się</button>
+        <div class="register">
+          <p>Nie masz konta? <a th:href="@{/register}">Zarejestruj się</a></p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script th:src="@{/js/notifications.js}"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+</body>
+</html>
