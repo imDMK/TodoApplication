@@ -1,4 +1,4 @@
 # TodoApplication
-Simple to do application.
+My first application created using spring web and html, css and js.
 
-**Work in progress**
+**Not completed**
