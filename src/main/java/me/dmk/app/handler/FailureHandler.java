@@ -28,15 +28,19 @@ public class FailureHandler implements AuthenticationFailureHandler {
         //Whether the error is database server dependent
         if (exception.getCause() instanceof MongoException || exception.getCause() instanceof MongoTimeoutException) {
             flashMap.put("error", "Wystąpił błąd z serwerem.");
-        } else if (exception instanceof BadCredentialsException) {
+        }
+        else if (exception instanceof BadCredentialsException) {
             flashMap.put("error", "Nieprawidłowe dane logowania.");
-        } else {
+        }
+        else {
             flashMap.put("error", exception.getMessage());
         }
 
         FlashMapManager flashMapManager = new SessionFlashMapManager();
         flashMapManager.saveOutputFlashMap(flashMap, request, response);
 
-        response.sendRedirect(request.getHeader("referer"));
+        response.sendRedirect(
+                request.getHeader("referer")
+        );
     }
 }

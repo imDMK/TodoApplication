@@ -26,6 +26,6 @@ public class LogoutHandler implements LogoutSuccessHandler {
         FlashMapManager flashMapManager = new SessionFlashMapManager();
         flashMapManager.saveOutputFlashMap(flashMap, request, response);
 
-        response.sendRedirect("/login");
+        response.sendRedirect("/home");
     }
 }

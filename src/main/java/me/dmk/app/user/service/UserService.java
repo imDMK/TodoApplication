@@ -2,16 +2,16 @@ package me.dmk.app.user.service;
 
 import me.dmk.app.user.User;
 import me.dmk.app.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Optional;
 
 /**
  * Created by DMK on 17.04.2023
@@ -20,22 +20,25 @@ import java.util.ArrayList;
 @Service
 public class UserService implements UserDetailsService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = this.userRepository.findUserByEmail(email);
+        return Optional.ofNullable(this.userRepository.findUserByEmail(email))
+                .orElseThrow(() -> new UsernameNotFoundException("Nieprawidłowe dane logowania."));
+    }
 
-        if (user == null) {
-            throw new UsernameNotFoundException("Nieprawidłowe dane logowania.");
-        } else {
-            return new org.springframework.security.core.userdetails.User(
-                    user.getEmail(),
-                    user.getPassword(),
-                    new ArrayList<>()
-            );
-        }
+    public void saveUser(User user) {
+        user.setPassword(
+                this.passwordEncoder.encode(user.getPassword())
+        );
+
+        this.userRepository.save(user);
     }
 
     public boolean isAuthenticated() {

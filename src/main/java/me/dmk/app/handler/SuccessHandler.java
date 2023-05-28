@@ -26,6 +26,8 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
          FlashMapManager flashMapManager = new SessionFlashMapManager();
          flashMapManager.saveOutputFlashMap(flashMap, request, response);
 
-         response.sendRedirect(request.getHeader("referer"));
+         response.sendRedirect(
+                 request.getHeader("referer")
+         );
     }
 }
