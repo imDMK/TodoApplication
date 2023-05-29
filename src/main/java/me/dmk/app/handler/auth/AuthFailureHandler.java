@@ -1,7 +1,6 @@
-package me.dmk.app.handler;
+package me.dmk.app.handler.auth;
 
 import com.mongodb.MongoException;
-import com.mongodb.MongoTimeoutException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,15 +18,15 @@ import java.io.IOException;
  */
 
 @Component
-public class FailureHandler implements AuthenticationFailureHandler {
+public class AuthFailureHandler implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         FlashMap flashMap = new FlashMap();
 
         //Whether the error is database server dependent
-        if (exception.getCause() instanceof MongoException || exception.getCause() instanceof MongoTimeoutException) {
-            flashMap.put("error", "Wystąpił błąd z serwerem.");
+        if (exception.getCause() instanceof MongoException) {
+            flashMap.put("error", "Wystąpił błąd z bazą danych.");
         }
         else if (exception instanceof BadCredentialsException) {
             flashMap.put("error", "Nieprawidłowe dane logowania.");
