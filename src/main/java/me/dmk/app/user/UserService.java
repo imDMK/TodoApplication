@@ -1,7 +1,6 @@
-package me.dmk.app.user.service;
+package me.dmk.app.user;
 
-import me.dmk.app.user.User;
-import me.dmk.app.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,33 +8,28 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 /**
  * Created by DMK on 17.04.2023
  */
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return Optional.ofNullable(this.userRepository.findUserByEmail(email))
+        return this.userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Nieprawidłowe dane logowania."));
     }
 
     public void saveUser(User user) {
         user.setPassword(
-                this.passwordEncoder.encode(user.getPassword())
+                this.passwordEncoder().encode(user.getPassword())
         );
 
         this.userRepository.save(user);
@@ -48,5 +42,9 @@ public class UserService implements UserDetailsService {
         }
 
         return authentication.isAuthenticated();
+    }
+
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

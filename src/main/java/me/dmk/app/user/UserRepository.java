@@ -1,10 +1,11 @@
-package me.dmk.app.user.repository;
+package me.dmk.app.user;
 
-import me.dmk.app.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * Created by DMK on 17.04.2023
@@ -14,5 +15,5 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserRepository extends MongoRepository<User, String> {
 
     @Query("{email: '?0'}")
-    User findUserByEmail(String email);
+    Optional<User> findUserByEmail(String email);
 }
