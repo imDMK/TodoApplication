@@ -2,60 +2,59 @@ package me.dmk.app.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import me.dmk.app.user.todo.Todo;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Collections;
+import java.util.HashSet;
 
 /**
  * Created by DMK on 17.04.2023
  */
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-@Document("users")
+@RequiredArgsConstructor
+@Document(collection = "users")
 public class User implements Serializable, UserDetails {
 
     private String email;
-    private String username;
     private String password;
+    private String username;
 
-    private boolean expired;
-    private boolean locked;
-    private boolean credentialsExpired;
-    private boolean enabled;
+    private HashSet<Todo> todoList = new HashSet<>();
 
-    private List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-    private List<String> todoList = new ArrayList<>();
-
-    public User(String email, String username, String password) {
-        this.email = email;
-        this.username = username;
-        this.password = password;
+    @Override
+    public String getUsername() {
+        return this.username;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return !this.expired;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return !this.locked;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !this.credentialsExpired;
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.grantedAuthorities;
+        return Collections.emptyList();
     }
 }
