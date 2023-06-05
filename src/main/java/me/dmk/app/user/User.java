@@ -11,7 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by DMK on 17.04.2023
@@ -26,7 +27,7 @@ public class User implements Serializable, UserDetails {
     private String password;
     private String username;
 
-    private HashSet<Todo> todoList = new HashSet<>();
+    private Map<Long, Todo> todoList = new ConcurrentHashMap<>();
 
     @Override
     public String getUsername() {

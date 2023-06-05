@@ -3,6 +3,7 @@ package me.dmk.app.user.todo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -18,6 +19,8 @@ import java.util.Date;
 @Document(collection = "todos")
 public class Todo implements Serializable {
 
+    @Id
+    private long id;
     private String name;
     private String description;
 
